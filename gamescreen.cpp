@@ -104,7 +104,7 @@ void GameScreen::clear_full_rows()
     }
 
     for (int y = 429; y > 50; y-=20) {
-        QList<QGraphicsItem *> list = scene->items(199, y, 202, 22, Qt::ContainsItemShape, Qt::AscendingOrder);
+        QList<QGraphicsItem *> list = scene->items(99, y, 202, 22, Qt::ContainsItemShape, Qt::AscendingOrder);
         if (list.count() == 10) {
             foreach (QGraphicsItem *item2, list) {
                 block *box = (block *) item2;

@@ -72,6 +72,7 @@ void blockGroup::create_box(const QPointF &point, BoxShape shape) {
     if(shape == RandomShape) {
         shape_id = qrand()%7;//随机取一个颜色
     }
+    current_shape = (BoxShape)shape_id;
     QColor color = color_table[shape_id];//根据id选颜色
     QList<block *> list;
     setTransform(old_transform);//恢复方块组前的变换矩阵
