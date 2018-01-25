@@ -131,7 +131,7 @@ void GameScreen::move_box()
 {
     for(int i = rows.count(); i > 0; --i) {
         int row = rows.at(i-1);
-        foreach(QGraphicsItem *item1, scene->items(199, 49, 202, row-47, Qt::ContainsItemShape,  Qt::AscendingOrder)) {
+        foreach(QGraphicsItem *item1, scene->items(99, 49, 202, row-47, Qt::ContainsItemShape,  Qt::AscendingOrder)) {
             item1->moveBy(0, 20);
         }
     }
