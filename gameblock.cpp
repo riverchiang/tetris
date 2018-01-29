@@ -10,8 +10,8 @@ block::block(const QColor &color) : brushColor(color) {
 }
 
 QRectF block::boundingRect() const {
-    qreal pen_width = 1;
-    return QRectF(-10-pen_width/2, -10-pen_width/2, 20+pen_width, 20+pen_width);
+    qreal penWidth = 1;
+    return QRectF(-10 - penWidth/2, -10 - penWidth/2, 20 + penWidth, 20 + penWidth);
 }
 
 void block::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget){
@@ -31,13 +31,13 @@ QPainterPath block::shape() const{
 
 blockGroup::blockGroup() {
     setFlags(QGraphicsItem::ItemIsFocusable);
-    old_transform = transform();
-    current_shape = RandomShape;
+    oldTransform = transform();
+    currentShape = RandomShape;
     timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(move_one_step()));
+    connect(timer, SIGNAL(timeout()), this, SLOT(moveOneStep()));
 }
 
-void blockGroup::move_one_step()
+void blockGroup::moveOneStep()
 {
     moveBy(0, 20);
     if (isColliding()) {
@@ -51,38 +51,38 @@ void blockGroup::startTimer(int interval)
     timer->start(interval);
 }
 
-void blockGroup::stop_timer()
+void blockGroup::stopTimer()
 {
     timer->stop();
 }
 
 QRectF blockGroup::boundingRect() const {
-    qreal pen_width = 1;
-    return QRectF(-40-pen_width/2, -40-pen_width/2, 80+pen_width, 80+pen_width);
+    qreal penWidth = 1;
+    return QRectF(-40 - penWidth/2, -40 - penWidth/2, 80 + penWidth, 80 + penWidth);
 }
 
 void blockGroup::createBlock(const QPointF &point, BlockShape shape) {
 
-    static const QColor color_table[7] = {
+    static const QColor colorTable[7] = {
         QColor(200, 0, 0, 100), QColor(255, 200, 0, 100), QColor(0, 0, 200, 100),
         QColor(0, 200, 0, 100), QColor(0, 200, 255, 100), QColor(200, 0, 255, 100),
         QColor(150, 100, 100, 100)
     };
-    int shape_id = shape;
+    int shapeId = shape;
     if(shape == RandomShape) {
-        shape_id = qrand()%7;
+        shapeId = qrand()%7;
     }
-    current_shape = (BlockShape)shape_id;
-    QColor color = color_table[shape_id];
+    currentShape = (BlockShape)shapeId;
+    QColor color = colorTable[shapeId];
     QList<block *> list;
-    setTransform(old_transform);
+    setTransform(oldTransform);
     for(int i = 0; i < 4; ++i) {
         block *temp  = new block(color);
         list << temp;
         addToGroup(temp);
     }
 
-    Shape *myShape = new Shape(shape_id);
+    Shape *myShape = new Shape(shapeId);
     myShape->setPosition(list);
     setPos(point);
 
@@ -90,9 +90,9 @@ void blockGroup::createBlock(const QPointF &point, BlockShape shape) {
 
 bool blockGroup::isColliding()
 {
-    QList<QGraphicsItem *> item_list = childItems();
+    QList<QGraphicsItem *> items = childItems();
     QGraphicsItem *item;
-    foreach (item, item_list) {
+    foreach (item, items) {
         if (item->collidingItems().count() > 1)
             return true;
     }
@@ -126,11 +126,11 @@ void blockGroup::buttonRight()
 
 void blockGroup::buttonRotate()
 {
-    transform1.rotate(90);
-    setTransform(transform1);
+    newTransform.rotate(90);
+    setTransform(newTransform);
     if (isColliding()) {
-         transform1.rotate(-90);
-         setTransform(transform1);
+         newTransform.rotate(-90);
+         setTransform(newTransform);
     }
 }
 
@@ -157,11 +157,11 @@ void blockGroup::keyPressEvent(QKeyEvent *event) {
             }
             break;
         case Qt::Key_Space:
-            transform1.rotate(90);
-            setTransform(transform1);
+            newTransform.rotate(90);
+            setTransform(newTransform);
             if (isColliding()) {
-                transform1.rotate(-90);
-                setTransform(transform1);
+                newTransform.rotate(-90);
+                setTransform(newTransform);
             }
             break;
     }
@@ -169,13 +169,13 @@ void blockGroup::keyPressEvent(QKeyEvent *event) {
 
 void blockGroup::clearBlockGroup(bool destroyBlock)
 {
-    QList<QGraphicsItem *> item_list = childItems();
+    QList<QGraphicsItem *> items = childItems();
     QGraphicsItem *item1;
-    foreach (item1, item_list) {
+    foreach (item1, items) {
         removeFromGroup(item1);
         if (destroyBlock) {
-            block *box = (block*)item1;
-            box->deleteLater();
+            block *removeBlock = (block*)item1;
+            removeBlock->deleteLater();
         }
     }
 }

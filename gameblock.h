@@ -25,12 +25,12 @@ public:
     void clearBlockGroup(bool destroyBlock = false);
     void createBlock(const QPointF &point, BlockShape shape = RandomShape);
     bool isColliding();
-    BlockShape getCurrentShape() {return current_shape;}
-    BlockShape current_shape;
+    BlockShape getCurrentShape() {return currentShape;}
+    BlockShape currentShape;
 public slots:
     void startTimer(int interval);
-    void stop_timer();
-    void move_one_step();
+    void stopTimer();
+    void moveOneStep();
     void buttonDown();
     void buttonLeft();
     void buttonRight();
@@ -40,8 +40,8 @@ protected:
 signals:
     void needNewBlock();
 private:
-    QTransform old_transform;
-    QTransform transform1;
+    QTransform oldTransform;
+    QTransform newTransform;
     QTimer *timer;
 };
 

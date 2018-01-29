@@ -7,7 +7,7 @@
 GameScreen::GameScreen(QWidget *parent) :
     QGraphicsView(parent)
 {
-    init_view();
+    initView();
 }
 
 void GameScreen::setGamePanel()
@@ -39,10 +39,10 @@ void GameScreen::setGamePanel()
     panelWidget->move(120, 470);
     scene->addWidget(panelWidget);
 
-    connect(buttonDown, SIGNAL(clicked()), box_group, SLOT(buttonDown()));
-    connect(buttonLeft, SIGNAL(clicked()), box_group, SLOT(buttonLeft()));
-    connect(buttonRight, SIGNAL(clicked()), box_group, SLOT(buttonRight()));
-    connect(buttonRotate, SIGNAL(clicked()), box_group, SLOT(buttonRotate()));
+    connect(buttonDown, SIGNAL(clicked()), boxGroup, SLOT(buttonDown()));
+    connect(buttonLeft, SIGNAL(clicked()), boxGroup, SLOT(buttonLeft()));
+    connect(buttonRight, SIGNAL(clicked()), boxGroup, SLOT(buttonRight()));
+    connect(buttonRotate, SIGNAL(clicked()), boxGroup, SLOT(buttonRotate()));
 }
 
 void GameScreen::setScoreLCD()
@@ -55,7 +55,7 @@ void GameScreen::setScoreLCD()
     scene->addWidget(myLCDNumber);
 }
 
-void GameScreen::init_view()
+void GameScreen::initView()
 {
     setRenderHint(QPainter::Antialiasing);
     setCacheMode(CacheBackground);
@@ -66,10 +66,10 @@ void GameScreen::init_view()
     scene->setSceneRect(5, 5, 500, 600);
     setScene(scene);
 
-    top_line = scene->addLine(97, 47, 303, 47);
-    bottom_line = scene->addLine(97, 453, 303, 453);
-    left_line = scene->addLine(97, 47, 97, 453);
-    right_line = scene->addLine(303, 47, 303, 453);
+    topLine = scene->addLine(97, 47, 303, 47);
+    bottomLine = scene->addLine(97, 453, 303, 453);
+    leftLine = scene->addLine(97, 47, 97, 453);
+    rightLine = scene->addLine(303, 47, 303, 453);
 
     QGraphicsRectItem *item = new QGraphicsRectItem(320,100,100,80);
     scene->addItem(item);
@@ -78,26 +78,26 @@ void GameScreen::init_view()
     scoreLabel->move(330, 70);
     scene->addWidget(scoreLabel);
 
-    next_box_group = new blockGroup;
-    scene->addItem(next_box_group);
-    next_box_group->createBlock(QPointF(360,140));
+    nextBoxGroup = new blockGroup;
+    scene->addItem(nextBoxGroup);
+    nextBoxGroup->createBlock(QPointF(360,140));
 
-    box_group = new blockGroup;
-    scene->addItem(box_group);
+    boxGroup = new blockGroup;
+    scene->addItem(boxGroup);
 
-    box_group->createBlock(QPointF(200, 70));
-    box_group->setFocus();
-    box_group->startTimer(1000);
+    boxGroup->createBlock(QPointF(200, 70));
+    boxGroup->setFocus();
+    boxGroup->startTimer(1000);
 
-    connect(box_group, SIGNAL(needNewBlock()), this, SLOT(clear_full_rows()));
+    connect(boxGroup, SIGNAL(needNewBlock()), this, SLOT(clearFullRows()));
 
     setScoreLCD();
     setGamePanel();
 }
 
-void GameScreen::clear_full_rows()
+void GameScreen::clearFullRows()
 {
-    box_group->clearBlockGroup(false);
+    boxGroup->clearBlockGroup(false);
 
     for (int y = 429; y > 50; y-=20) {
         QList<QGraphicsItem *> list = scene->items(99, y, 202, 22, Qt::ContainsItemShape, Qt::AscendingOrder);
@@ -120,10 +120,10 @@ void GameScreen::clear_full_rows()
 
     score += rows.count();
     myLCDNumber->display(score);
-    QTimer::singleShot(400, this, SLOT(move_box()));
+    QTimer::singleShot(400, this, SLOT(moveBlock()));
 }
 
-void GameScreen::move_box()
+void GameScreen::moveBlock()
 {
     for(int i = rows.count(); i > 0; --i) {
         int row = rows.at(i-1);
@@ -132,17 +132,17 @@ void GameScreen::move_box()
         }
     }
     rows.clear();
-    box_group->createBlock(QPointF(200, 70), next_box_group->getCurrentShape());
-    next_box_group->clearBlockGroup(true);
-    next_box_group->createBlock(QPointF(360,140));
+    boxGroup->createBlock(QPointF(200, 70), nextBoxGroup->getCurrentShape());
+    nextBoxGroup->clearBlockGroup(true);
+    nextBoxGroup->createBlock(QPointF(360,140));
 }
 
 bool GameScreen::iscolliding()
 {
-    QList<QGraphicsItem *> item_list = box_group->childItems();
+    QList<QGraphicsItem *> items = boxGroup->childItems();
     QGraphicsItem *item1;
 
-    foreach (item1, item_list) {
+    foreach (item1, items) {
         if (item1->collidingItems().count() > 1) {
             return true;
         }

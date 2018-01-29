@@ -21,22 +21,19 @@ public:
     explicit GameScreen(QWidget *parent = 0);
     bool iscolliding();
 public slots:
-    void clear_full_rows();
-    void move_box();
+    void clearFullRows();
+    void moveBlock();
 
 private:
-    QGraphicsLineItem *top_line;
-    QGraphicsLineItem *bottom_line;
-    QGraphicsLineItem *left_line;
-    QGraphicsLineItem *right_line;
-    blockGroup *box_group;
-    blockGroup *next_box_group;
-    QTransform transform1;
+    QGraphicsLineItem *topLine;
+    QGraphicsLineItem *bottomLine;
+    QGraphicsLineItem *leftLine;
+    QGraphicsLineItem *rightLine;
+    blockGroup *boxGroup;
+    blockGroup *nextBoxGroup;
     QGraphicsScene *scene;
-    QGraphicsWidget *mask_widget;
-    QTimer *mytimer;
 
-    void init_view();
+    void initView();
     void setGamePanel();
     void setScoreLCD();
     QList<int> rows;
