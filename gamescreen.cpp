@@ -80,16 +80,16 @@ void GameScreen::init_view()
 
     next_box_group = new blockGroup;
     scene->addItem(next_box_group);
-    next_box_group->create_box(QPointF(360,140));
+    next_box_group->createBlock(QPointF(360,140));
 
     box_group = new blockGroup;
     scene->addItem(box_group);
 
-    box_group->create_box(QPointF(200, 70));
+    box_group->createBlock(QPointF(200, 70));
     box_group->setFocus();
     box_group->startTimer(1000);
 
-    connect(box_group, SIGNAL(need_new_box()), this, SLOT(clear_full_rows()));
+    connect(box_group, SIGNAL(needNewBlock()), this, SLOT(clear_full_rows()));
 
     setScoreLCD();
     setGamePanel();
@@ -97,11 +97,7 @@ void GameScreen::init_view()
 
 void GameScreen::clear_full_rows()
 {
-    QList<QGraphicsItem *> item_list = box_group->childItems();
-    QGraphicsItem *item1;
-    foreach (item1, item_list) {
-        box_group->removeFromGroup(item1);
-    }
+    box_group->clearBlockGroup(false);
 
     for (int y = 429; y > 50; y-=20) {
         QList<QGraphicsItem *> list = scene->items(99, y, 202, 22, Qt::ContainsItemShape, Qt::AscendingOrder);
@@ -136,9 +132,9 @@ void GameScreen::move_box()
         }
     }
     rows.clear();
-    box_group->create_box(QPointF(200, 70), next_box_group->getCurrentShape());
-    next_box_group->clear_box_group(true);
-    next_box_group->create_box(QPointF(360,140));
+    box_group->createBlock(QPointF(200, 70), next_box_group->getCurrentShape());
+    next_box_group->clearBlockGroup(true);
+    next_box_group->createBlock(QPointF(360,140));
 }
 
 bool GameScreen::iscolliding()

@@ -20,7 +20,6 @@ class GameScreen : public QGraphicsView
 public:
     explicit GameScreen(QWidget *parent = 0);
     bool iscolliding();
-    void clear_box_group(bool destory_box = false);
 public slots:
     void clear_full_rows();
     void move_box();
