@@ -25,6 +25,14 @@ public slots:
     void moveBlock();
 
 private:
+    void initView();
+    void setGamePanel();
+    void setScoreLCD();
+    bool checkGameFinish();
+    void finishGame();
+    QList<int> rows;
+    int score = 0;
+
     QGraphicsLineItem *topLine;
     QGraphicsLineItem *bottomLine;
     QGraphicsLineItem *leftLine;
@@ -32,13 +40,6 @@ private:
     blockGroup *boxGroup;
     blockGroup *nextBoxGroup;
     QGraphicsScene *scene;
-
-    void initView();
-    void setGamePanel();
-    void setScoreLCD();
-    QList<int> rows;
-    int score = 0;
-
     QLCDNumber *myLCDNumber;
     QPushButton *buttonDown;
     QPushButton *buttonLeft;
@@ -47,6 +48,8 @@ private:
     QGridLayout *panelGirdLayout;
     QWidget *panelWidget;
     QLabel *scoreLabel;
+    QGraphicsWidget *gameFinishWidget;
+    QFont font;
 };
 
 #endif // GAMESCREEN_H

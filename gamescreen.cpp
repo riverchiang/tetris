@@ -74,8 +74,14 @@ void GameScreen::initView()
     QGraphicsRectItem *item = new QGraphicsRectItem(320,100,100,80);
     scene->addItem(item);
 
-    scoreLabel = new QLabel("next block");
+
+
+    scoreLabel = new QLabel("Next block");
     scoreLabel->move(330, 70);
+    font = scoreLabel->font();
+    font.setPointSize(15);
+    font.setBold(true);
+    scoreLabel->setFont(font);
     scene->addWidget(scoreLabel);
 
     nextBoxGroup = new blockGroup;
@@ -123,6 +129,37 @@ void GameScreen::clearFullRows()
     QTimer::singleShot(400, this, SLOT(moveBlock()));
 }
 
+bool GameScreen::checkGameFinish()
+{
+    QList<QGraphicsItem *> list = scene->items(99, 49, 202, 22, Qt::ContainsItemShape, Qt::AscendingOrder);
+    if (list.count() > 0)
+        return true;
+    return false;
+}
+
+void GameScreen::finishGame()
+{
+    QWidget *mask = new QWidget;
+    QLabel *finishLabel = new QLabel(mask);
+    QHBoxLayout *layout = new QHBoxLayout();
+    font = finishLabel->font();
+
+    font.setPointSize(27);
+    font.setBold(true);
+    finishLabel->setFont(font);
+
+    finishLabel->setText("Game Over");
+    layout->addWidget(finishLabel);
+
+    mask->setPalette(QPalette(QColor(0, 0, 0, 150)));
+    mask->resize(200, 400);
+    mask->setLayout(layout);
+
+    gameFinishWidget = scene->addWidget(mask);
+    gameFinishWidget->setPos(100, 50);
+    gameFinishWidget->setZValue(1);
+}
+
 void GameScreen::moveBlock()
 {
     for(int i = rows.count(); i > 0; --i) {
@@ -132,9 +169,16 @@ void GameScreen::moveBlock()
         }
     }
     rows.clear();
-    boxGroup->createBlock(QPointF(200, 70), nextBoxGroup->getCurrentShape());
-    nextBoxGroup->clearBlockGroup(true);
-    nextBoxGroup->createBlock(QPointF(360,140));
+
+    if (checkGameFinish())
+    {
+        finishGame();
+    }
+    else {
+        boxGroup->createBlock(QPointF(200, 70), nextBoxGroup->getCurrentShape());
+        nextBoxGroup->clearBlockGroup(true);
+        nextBoxGroup->createBlock(QPointF(360,140));
+    }
 }
 
 bool GameScreen::iscolliding()

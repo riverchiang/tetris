@@ -21,6 +21,8 @@ void block::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWi
     penColor.setAlpha(20);
     painter->setPen(penColor);
     painter->drawRect(-10, -10, 20, 20);
+    Q_UNUSED(option);
+    Q_UNUSED(widget);
 }
 
 QPainterPath block::shape() const{
